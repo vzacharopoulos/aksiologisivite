@@ -12,9 +12,9 @@ import handlesubmit from './AddressForm'
 
 
   
-export default function Review({  }) {
+export default function Review() {
   const payments = [
-  { name: 'Ονομα:', detail: handlesubmit  },
+  { name: 'Ονομα:', detail: ''  },
   { name: 'Επίθετο:', detail:''  },
   { name: 'Θέση εργασίας:', detail:''  },
   ];
