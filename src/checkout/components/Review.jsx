@@ -6,22 +6,24 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import handlesubmit from './AddressForm'
 
-const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type:', detail: 'Visa' },
-  { name: 'Card holder:', detail: 'Mr. John Smith' },
-  { name: 'Card number:', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date:', detail: '04/2024' },
-];
 
-export default function Review() {
+
+
+  
+export default function Review({  }) {
+  const payments = [
+  { name: 'Ονομα:', detail: handlesubmit  },
+  { name: 'Επίθετο:', detail:''  },
+  { name: 'Θέση εργασίας:', detail:''  },
+  ];
   return (
     <Stack spacing={2}>
     
         <div>
           <Typography variant="subtitle2" gutterBottom>
-            ονομα
+            στοιχεια Εργαζομενου
           </Typography>
           <Grid container>
             {payments.map((payment) => (

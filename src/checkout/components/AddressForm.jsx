@@ -13,14 +13,19 @@ const FormGrid = styled(Grid)(() => ({
   flexDirection: 'column',
 }));
 
-export default function AddressForm() {
+export default function  AddressForm({
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  thesiErgasias,
+  setThesiErgasias
+}) {
 
-   const [firstName, setFirstName] = useState("");
-   const [lastName, setLastName] = useState("");
-   const [thesiErgasias, setThesiErgasias] = useState("");
+  
 
   const handleSubmit = () => {
-    console.log("First Name:", firstName);
+    console.log("First Name:", setFirstName());
   };
   return (
     <Grid container spacing={3}>
@@ -70,7 +75,7 @@ export default function AddressForm() {
       displayEmpty
       inputProps={{ 'aria-label': 'Address line 1' }}
        value={thesiErgasias}
-          onChange={(e) => setThesErgasias(e.target.value)}
+          onChange={(e) => setThesiErgasias(e.target.value)}
     >
       <MenuItem value="" disabled>
         διαλεξε θεση εργασιας

@@ -22,6 +22,14 @@ import AppTheme from '../../shared-theme/AppTheme';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 
 const steps = ['στοιχεια εργαζομενου', 'ερωτηματολογιο', 'επιβεβαιωση'];
+
+export default function Checkout(props) {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+ 
+const [thesiErgasias, setThesiErgasias] = React.useState("");
+const steps = ['στοιχεια εργαζομενου', 'ερωτηματολογιο', 'επιβεβαιωση'];
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -38,20 +46,18 @@ function getStepContent(step) {
       return <Erotiseis />;
     case 2:
       return <Review />;
+      
+          
+      
     default:
       throw new Error('Unknown step');
   }
 }
-export default function Checkout(props) {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const  [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-const [thesiErgasias, setThesiErgasias] = React.useState("");
   const handleNext = () => {
     if (
-      (firstName  &&
+      (!firstName.trim()|| !lastName.trim() ||!thesiErgasias.trim())  &&
       activeStep === 0)
-    ) {
+     {
       alert("Συμπλήρωσε όλα τα πεδία πριν συνεχίσεις."); 
     }
 else{
@@ -60,13 +66,13 @@ else{
   };  
   
   const handleBack = () => {
-    setActiveStep(activeStep - 1);
+    setActiveStep(activeStep - 1)};
 
-    const handleStart = ()=> {
-      setActiveStep(activeStep -activeStep.length+1)
-    }
+  const handleStart = ()=> {
+      setActiveStep(activeStep -2)
+    };
     
-  };
+  
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
@@ -224,8 +230,9 @@ else{
                 <Button
                   variant="contained"
                   sx={{ alignSelf: 'start', width: { xs: '100%', sm: 'auto' } }}
-                >
-                  το ερωτηματολογιο ολ
+                  onClick={handleStart}
+                > 
+                  επιστροφη στην αρχικη
                 </Button>
               </Stack>
             ) : (
