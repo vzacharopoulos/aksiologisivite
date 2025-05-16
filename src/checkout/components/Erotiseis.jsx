@@ -13,13 +13,12 @@ const FormGrid = styled(Grid)(() => ({
   flexDirection: 'column',
 }));
 
-export default function Erotiseis() {
+export default function Erotiseis({ thesiErgasias }) {
   return (
     <Grid container spacing={3}>
-      
-      
+      console.log(thesiErgasias);
 
-<FormGrid size={{ xs: 12 }}>
+ <FormGrid size={{ xs: 12 }}>
   <FormLabel htmlFor="erotisi1" required>
     ειναι ο χωρος καθαρος?
   </FormLabel>
@@ -40,6 +39,7 @@ export default function Erotiseis() {
     </Select>
   </FormControl>
 </FormGrid>
+
 <FormGrid size={{ xs: 12 }}>
   <FormLabel htmlFor="erotisi2" required>
     υπαρχει καποια ζημια?
@@ -63,7 +63,7 @@ export default function Erotiseis() {
 </FormGrid>
 
 <FormGrid size={{ xs: 6, md: 20 }}>
-        <FormLabel htmlFor="first-name" required>
+        <FormLabel htmlFor="first-name" >
           παρατηρησεις 
         </FormLabel>
         <OutlinedInput

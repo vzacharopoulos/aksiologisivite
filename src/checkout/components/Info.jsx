@@ -4,7 +4,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import GetShift from  '../utilities/getShift'
+import GetShift from  '../utilities/getShift';
+import GetShifttime from  '../utilities/getShift';
  const currentDate = new Date().toLocaleDateString()
 const products = [
   {
@@ -15,7 +16,7 @@ const products = [
   {
     name: 'βαρδια',
     desc: <GetShift />,
-    price: '14:00-22:00',
+    price: <GetShifttime />,
   },
   
 ];

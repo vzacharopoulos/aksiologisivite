@@ -37,7 +37,7 @@ export default function  AddressForm({
           id="first-name"
           name="first-name"
           type="name"
-          placeholder="John"
+          placeholder="ονομα"
           autoComplete="first name"
           required
           size="small"
@@ -53,7 +53,7 @@ export default function  AddressForm({
           id="last-name"
           name="last-name"
           type="last-name"
-          placeholder="Snow"
+          placeholder="επιθετο"
           autoComplete="last name"
           required
           size="small"
