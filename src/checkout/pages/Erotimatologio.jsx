@@ -15,21 +15,43 @@ import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import AddressForm from '../components/AddressForm';
 import Info from '../components/Info';
 import InfoMobile from '../components/InfoMobile';
-import Erotiseis from '../components/Erotiseis.jsx';
+import Erotiseis1 from '../components/Erotiseis1.jsx';
+import Erotiseis2 from '../components/Erotiseis2.jsx';
+import Erotiseis3 from '../components/Erotiseis3.jsx';
 import Review from '../components/Review';
 import SitemarkIcon from '../components/SitemarkIcon';
 import AppTheme from '../../shared-theme/AppTheme';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 
-const steps = ['στοιχεια εργαζομενου', 'ερωτηματολογιο', 'επιβεβαιωση'];
+import { useEffect } from 'react';
+
+
 
 export default function Checkout(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
+  
+  const [showErotiseis, setShowErotiseis] = React.useState('');
  
-const [thesiErgasias, setThesiErgasias] = React.useState("");
-const steps = ['στοιχεια εργαζομενου', 'ερωτηματολογιο', 'επιβεβαιωση'];
+ const [thesiErgasias, setThesiErgasias] = React.useState("");
+ const steps = ['στοιχεια εργαζομενου', 'ερωτηματολογιο', 'επιβεβαιωση'];
+
+ useEffect(() => {
+    if (thesiErgasias==="πριονι") {
+      setShowErotiseis('one');
+    }
+    else if (thesiErgasias=== "αφρος") {
+      
+     setShowErotiseis('two');
+    }else if (thesiErgasias=== "ρολλα") {
+      
+     setShowErotiseis('three');
+
+  }
+}, [thesiErgasias]);
+
+
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -41,11 +63,34 @@ function getStepContent(step) {
       setLastName={setLastName}
       thesiErgasias={thesiErgasias}
       setThesiErgasias={setThesiErgasias}
+     
     />);
-    case 1:
-      return <Erotiseis />;
+    /*make a useffect and for set prioni*/
+    case 1: {
+      
+ if (showErotiseis === "one") {
+      
+      return <Erotiseis1 />;
+    } else if (showErotiseis === "two") {
+      
+      return <Erotiseis2 />;
+    } else if (showErotiseis === "three") {
+      return <Erotiseis3 />;
+    } else {
+      return (
+        <Grid item xs={12}>
+          <p>⚠️ Σφάλμα: δεν επιλέχθηκε σωστή θέση εργασίας.</p>
+        </Grid>
+      );
+    
+  
+    }  
+  
+}
+    
     case 2:
       return <Review />;
+      firstName={firstName}
       
           
       
@@ -69,8 +114,9 @@ else{
     setActiveStep(activeStep - 1)};
 
   const handleStart = ()=> {
-      setActiveStep(activeStep -2)
+      setActiveStep(activeStep -3)
     };
+    
     
   
   return (
@@ -141,6 +187,7 @@ else{
               alignItems: 'center',
               width: '100%',
               maxWidth: { sm: '100%', md: 600 },
+              
             }}
           >
             <Box

@@ -19,14 +19,13 @@ export default function  AddressForm({
   lastName,
   setLastName,
   thesiErgasias,
-  setThesiErgasias
+  setThesiErgasias,
+  
 }) {
 
   
 
-  const handleSubmit = () => {
-    console.log("First Name:", setFirstName());
-  };
+  
   return (
     <Grid container spacing={3}>
       <FormGrid size={{ xs: 12, md: 6 }}>
@@ -47,7 +46,7 @@ export default function  AddressForm({
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
         <FormLabel htmlFor="last-name" required>
-          επιθετο
+          επιθετο 
         </FormLabel>
         <OutlinedInput
           id="last-name"
@@ -59,7 +58,7 @@ export default function  AddressForm({
           size="small"
            value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-        />
+             />
       </FormGrid>
       
 
@@ -75,7 +74,11 @@ export default function  AddressForm({
       displayEmpty
       inputProps={{ 'aria-label': 'Address line 1' }}
        value={thesiErgasias}
-          onChange={(e) => setThesiErgasias(e.target.value)}
+          onChange={(e) => {const value = e.target.value;
+            setThesiErgasias(value);
+             
+            }}// or use conditionally: value === "πριονι" etc.
+         
     >
       <MenuItem value="" disabled>
         διαλεξε θεση εργασιας

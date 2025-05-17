@@ -6,17 +6,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import handlesubmit from './AddressForm'
+import getShifttime from '../utilities/getShifttime.jsx'
 
 
 
 
   
-export default function Review() {
+export default function Review({firstName}) {
   const payments = [
-  { name: 'Ονομα:', detail: ''  },
-  { name: 'Επίθετο:', detail:''  },
+  { name: 'Ονομα:', detail: firstName  },
+  { name: 'Επίθετο:', detail: '' },
   { name: 'Θέση εργασίας:', detail:''  },
+  { name: 'βαρδια:', detail:getShifttime()  },
   ];
   return (
     <Stack spacing={2}>

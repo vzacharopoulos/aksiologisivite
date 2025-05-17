@@ -13,10 +13,10 @@ const FormGrid = styled(Grid)(() => ({
   flexDirection: 'column',
 }));
 
-export default function Erotiseis({ thesiErgasias }) {
+export default function Erotiseis2({  }) {
   return (
     <Grid container spacing={3}>
-      console.log(thesiErgasias);
+     
 
  <FormGrid size={{ xs: 12 }}>
   <FormLabel htmlFor="erotisi1" required>
@@ -42,7 +42,7 @@ export default function Erotiseis({ thesiErgasias }) {
 
 <FormGrid size={{ xs: 12 }}>
   <FormLabel htmlFor="erotisi2" required>
-    υπαρχει καποια ζημια?
+    υπαρχει καποια ζημια στα χημικα?
   </FormLabel>
   <FormControl fullWidth required size="small">
     <Select
