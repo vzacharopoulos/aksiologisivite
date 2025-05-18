@@ -22,6 +22,7 @@ import Review from '../components/Review';
 import SitemarkIcon from '../components/SitemarkIcon';
 import AppTheme from '../../shared-theme/AppTheme';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
+import GetShift from '../utilities/getShift.jsx'
 
 import { useEffect } from 'react';
 
@@ -31,11 +32,48 @@ export default function Checkout(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
-  
+  const [answers, setAnswers] = React.useState({
+  erotisi1: '',
+  erotisi2: '',
+  paratiriseis: '',
+});
   const [showErotiseis, setShowErotiseis] = React.useState('');
  
  const [thesiErgasias, setThesiErgasias] = React.useState("");
  const steps = ['στοιχεια εργαζομενου', 'ερωτηματολογιο', 'επιβεβαιωση'];
+ var currentShift=GetShift()
+ const submitForm = async () => {
+  const payload = {
+    firstName,
+    lastName,
+    thesiErgasias,
+    currentShift,
+    ...answers
+  };
+
+  
+    const response = await fetch(' 	https://webhook.site/b39db0b5-bace-4d39-a96a-e1018a103fbb', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+      const text = await response.text(); // ⬅️ Try reading as plain text first
+      console.log('Raw response:', text);
+   try{
+    if (!response.ok) {
+      throw new Error('Failed to submit');
+    }
+
+   
+    
+    alert('Your form was submitted!');
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Something went wrong.');
+  }
+};
 
  useEffect(() => {
     if (thesiErgasias==="πριονι") {
@@ -70,7 +108,9 @@ function getStepContent(step) {
       
  if (showErotiseis === "one") {
       
-      return <Erotiseis1 />;
+      return <Erotiseis1
+      answers={answers}
+      setAnswers={setAnswers} />;
     } else if (showErotiseis === "two") {
       
       return <Erotiseis2 />;
@@ -89,8 +129,12 @@ function getStepContent(step) {
 }
     
     case 2:
-      return <Review />;
+      return <Review 
       firstName={firstName}
+      lastName={lastName}
+      thesiErgasias={thesiErgasias}
+
+      />;
       
           
       
@@ -116,6 +160,10 @@ else{
   const handleStart = ()=> {
       setActiveStep(activeStep -3)
     };
+    const handleSubmit = () => {
+  submitForm();       // Send to API
+  setActiveStep(3);   // Show confirmation or navigate if needed
+};
     
     
   
@@ -326,10 +374,10 @@ else{
                   <Button
                     variant="contained"
                     endIcon={<ChevronRightRoundedIcon />}
-                    onClick={handleNext}
+                    onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
                     sx={{ width: { xs: '100%', sm: 'fit-content' } }}
                   >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'επομενο'}
+                    {activeStep === steps.length - 1 ? 'καταχωρηση απαντησεων' : 'επομενο'}
                   </Button>
                 </Box>
               </React.Fragment>

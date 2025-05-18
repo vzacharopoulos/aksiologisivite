@@ -12,11 +12,11 @@ import getShifttime from '../utilities/getShifttime.jsx'
 
 
   
-export default function Review({firstName}) {
+export default function Review({firstName,lastName,thesiErgasias}) {
   const payments = [
   { name: 'Ονομα:', detail: firstName  },
-  { name: 'Επίθετο:', detail: '' },
-  { name: 'Θέση εργασίας:', detail:''  },
+  { name: 'Επίθετο:', detail: lastName},
+  { name: 'Θέση εργασίας:', detail:thesiErgasias  },
   { name: 'βαρδια:', detail:getShifttime()  },
   ];
   return (

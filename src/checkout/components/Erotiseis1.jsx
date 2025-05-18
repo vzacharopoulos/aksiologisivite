@@ -13,73 +13,76 @@ const FormGrid = styled(Grid)(() => ({
   flexDirection: 'column',
 }));
 
-export default function Erotiseis1({    }) {
-  
+export default function Erotiseis1({ answers, setAnswers }) {
+  // metadata for each question
+  const questions = [
+    {
+      id: 'erotisi1',
+      label: 'εἶναι ὁ χώρος καθαρός;',
+      type: 'select',
+      options: ['καλα', 'μετρια', 'κακα'],
+      placeholder: 'επελεξε?'
+    },
+    {
+      id: 'erotisi2',
+      label: 'υπάρχει κάποια ζημία στο πριόνι;',
+      type: 'select',
+      options: ['οχι', 'ναι'],
+      placeholder: 'επελεξε?'
+    },
+    {
+      id: 'paratiriseis',
+      label: 'παρατηρήσεις',
+      type: 'text',
+      placeholder: 'εισαγετε παρατηρηση'
+    }
+  ];
+
   return (
-    
     <Grid container spacing={3}>
-     
+      {questions.map((q) => (
+        <FormGrid key={q.id} item xs={12}>
+          <FormLabel htmlFor={q.id} required>
+            {q.label}
+          </FormLabel>
 
- <FormGrid size={{ xs: 12 }}>
-  <FormLabel htmlFor="erotisi1" required>
-    ειναι ο χωρος καθαρος?
-  </FormLabel>
-  <FormControl fullWidth required size="small">
-    <Select
-      id="erotisi1"
-      name="erotisi1"
-      defaultValue=""
-      displayEmpty
-      inputProps={{ 'aria-label': 'Address line 1' }}
-    >
-      <MenuItem value="" disabled>
-        επελεξε?
-      </MenuItem>
-      <MenuItem value="καλα">καλα</MenuItem>
-      <MenuItem value="μετρια">μετρια</MenuItem>
-      <MenuItem value="κακα">κακα</MenuItem>
-    </Select>
-  </FormControl>
-</FormGrid>
-
-<FormGrid size={{ xs: 12 }}>
-  <FormLabel htmlFor="erotisi2" required>
-    υπαρχει καποια ζημια στο πριονι?
-  </FormLabel>
-  <FormControl fullWidth required size="small">
-    <Select
-      id="erotisi2"
-      name="erotisi2"
-      defaultValue=""
-      displayEmpty
-      inputProps={{ 'aria-label': 'Address line 1' }}
-    >
-      <MenuItem value="" disabled>
-        επελεξε
-      </MenuItem>
-      <MenuItem value="οχι">οχι</MenuItem>
-      <MenuItem value="ναι">ναι</MenuItem>
-      
-    </Select>
-  </FormControl>
-</FormGrid>
-
-<FormGrid size={{ xs: 6, md: 20 }}>
-        <FormLabel htmlFor="first-name" >
-          παρατηρησεις 
-        </FormLabel>
-        <OutlinedInput
-          id="first-name"
-          name="first-name"
-          type="name"
-          placeholder="εισαγετε παρατηρηση"
-          autoComplete="first name"
-          required
-          size="small"
-        />
-      </FormGrid>
-      
-    
+          {q.type === 'text' ? (
+            <OutlinedInput
+              id={q.id}
+              name={q.id}
+              value={answers[q.id]}
+              placeholder={q.placeholder}
+              onChange={(e) =>
+                setAnswers({ ...answers, [q.id]: e.target.value })
+              }
+              fullWidth
+              size="small"
+            />
+          ) : (
+            <FormControl fullWidth required size="small">
+              <Select
+                id={q.id}
+                name={q.id}
+                value={answers[q.id]}
+                displayEmpty
+                onChange={(e) =>
+                  setAnswers({ ...answers, [q.id]: e.target.value })
+                }
+                inputProps={{ 'aria-label': q.label }}
+              >
+                <MenuItem value="" disabled>
+                  {q.placeholder}
+                </MenuItem>
+                {q.options.map((opt) => (
+                  <MenuItem key={opt} value={opt}>
+                    {opt}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+        </FormGrid>
+      ))}
     </Grid>
   );
 }
