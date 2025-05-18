@@ -15,9 +15,7 @@ import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import AddressForm from '../components/AddressForm';
 import Info from '../components/Info';
 import InfoMobile from '../components/InfoMobile';
-import Erotiseis1 from '../components/Erotiseis1.jsx';
-import Erotiseis2 from '../components/Erotiseis2.jsx';
-import Erotiseis3 from '../components/Erotiseis3.jsx';
+import Erotiseis from '../components/Erotiseis.jsx';
 import Review from '../components/Review';
 import SitemarkIcon from '../components/SitemarkIcon';
 import AppTheme from '../../shared-theme/AppTheme';
@@ -32,25 +30,28 @@ export default function Checkout(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
-  const [answers, setAnswers] = React.useState({
-  erotisi1: '',
-  erotisi2: '',
-  paratiriseis: '',
-});
-  const [showErotiseis, setShowErotiseis] = React.useState('');
+  const [answers, setAnswers] = React.useState({});
+  const [questions, setQuestions] = React.useState([]);
  
  const [thesiErgasias, setThesiErgasias] = React.useState("");
  const steps = ['στοιχεια εργαζομενου', 'ερωτηματολογιο', 'επιβεβαιωση'];
  var currentShift=GetShift()
  const submitForm = async () => {
+   const labeledQuestions = questions.reduce((acc, q, idx) => {
+    acc[`question${idx + 1}`] = q.label;
+    return acc;
+  }, {} );
+// => [ { label: "Foo" }, { label: "Bar" }, … ]
   const payload = {
     firstName,
     lastName,
     thesiErgasias,
     currentShift,
-    ...answers
+    ...labeledQuestions,
+    ...answers,
+  
   };
-
+   
   
     const response = await fetch(' 	https://webhook.site/b39db0b5-bace-4d39-a96a-e1018a103fbb', {
       method: 'POST',
@@ -74,20 +75,38 @@ export default function Checkout(props) {
     alert('Something went wrong.');
   }
 };
+ // when the user picks a job, also build the questions array
+ const handleThesiChange = (value) => {
+   setThesiErgasias(value);
+   let qs = [];
+   if (value === "πριονι") {
+     qs = [
+       { id: 'erotisi1', label: 'είναι ο χώρος καθαρός στο πριόνι;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+        { id: 'erotisi2', label: 'είναι ο χώρος καθαρός στο τυλιχτικο;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+        { id: 'erotisi3', label: 'είναι ο χώρος καθαρός στον πακεταδορο;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+       { id: 'erotisi4', label: 'υπάρχει κάποια ζημία;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
+       { id: 'erotisi5', label: 'υπάρχουν πολυουρεθάνες ή άλλα χημικά στο δάπεδο?', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+       { id: 'erotisi6', label: 'θεωρείτε πως υπάρχει κατι απο την προηγούμενη βάρδια που σας δημιουργησε προβλημα?', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+       { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
+     ];
+   } else if (value === "αφρος") {
+     qs = [
+       { id: 'erotisi1', label: 'εἶναι ὁ χώρος καθαρός;', type:'select', options:['καλα','μετρια','κακα'], placeholder:'επελεξε' },
+       { id: 'erotisi2', label: 'υπάρχει ζημία στα χημικά;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
+       { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
+     ];
+   } else if (value === "ρολλα") {
+     qs = [
+       { id: 'erotisi1', label: 'εἶναι ὁ χώρος καθαρός;', type:'select', options:['καλα','μετρια','κακα'], placeholder:'επελεξε' },
+       { id: 'erotisi2', label: 'υπάρχει ζημία στα ρολλά;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
+     ];
+   }
+   setAnswers(qs.reduce((acc, q) => ({ ...acc, [q.id]: '' }), {}));
+   setQuestions(qs);
+ };
 
- useEffect(() => {
-    if (thesiErgasias==="πριονι") {
-      setShowErotiseis('one');
-    }
-    else if (thesiErgasias=== "αφρος") {
-      
-     setShowErotiseis('two');
-    }else if (thesiErgasias=== "ρολλα") {
-      
-     setShowErotiseis('three');
-
-  }
-}, [thesiErgasias]);
+ 
 
 
 function getStepContent(step) {
@@ -100,23 +119,16 @@ function getStepContent(step) {
       lastName={lastName}
       setLastName={setLastName}
       thesiErgasias={thesiErgasias}
-      setThesiErgasias={setThesiErgasias}
-     
+      setThesiErgasias={handleThesiChange}
+      
     />);
     /*make a useffect and for set prioni*/
     case 1: {
       
- if (showErotiseis === "one") {
-      
-      return <Erotiseis1
-      answers={answers}
-      setAnswers={setAnswers} />;
-    } else if (showErotiseis === "two") {
-      
-      return <Erotiseis2 />;
-    } else if (showErotiseis === "three") {
-      return <Erotiseis3 />;
-    } else {
+ if (questions.length > 0) {
+         return <Erotiseis questions={questions}  answers={answers} setAnswers={setAnswers} />;
+        }
+     else {
       return (
         <Grid item xs={12}>
           <p>⚠️ Σφάλμα: δεν επιλέχθηκε σωστή θέση εργασίας.</p>
@@ -133,7 +145,8 @@ function getStepContent(step) {
       firstName={firstName}
       lastName={lastName}
       thesiErgasias={thesiErgasias}
-
+      questions={questions}
+      answers={answers}
       />;
       
           

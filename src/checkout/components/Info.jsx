@@ -5,7 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import GetShift from  '../utilities/getShift';
-import GetShifttime from  '../utilities/getShift';
+import GetShifttime from  '../utilities/getShifttime';
  const currentDate = new Date().toLocaleDateString()
 const products = [
   {
