@@ -78,7 +78,7 @@ export default function Review({
                   <Typography variant="body1" sx={{ color: 'text.secondary' }}>
                     {erotapantisi.name}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'warning.main' }}>{erotapantisi.detail}</Typography>
+                  <Typography variant="body2" >{erotapantisi.detail}</Typography>
                 </Stack>
               </React.Fragment>
             ))}
