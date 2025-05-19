@@ -34,7 +34,12 @@ export default function Checkout(props) {
   const [questions, setQuestions] = React.useState([]);
  
  const [thesiErgasias, setThesiErgasias] = React.useState("");
- const steps = ['στοιχεια εργαζομενου', 'ερωτηματολογιο', 'επιβεβαιωση'];
+ const [fieldErrors, setFieldErrors] = React.useState({
+  firstName: false,
+  lastName: false,
+  thesiErgasias: false,
+});
+ const steps = ['στοιχεία εργαζομένου', 'ερωτηματολόγιο', 'επιβεβαίωση'];
  var currentShift=GetShift()
  const submitForm = async () => {
    const labeledQuestions = questions.reduce((acc, q, idx) => {
@@ -49,11 +54,12 @@ export default function Checkout(props) {
     currentShift,
     ...labeledQuestions,
     ...answers,
+   
   
   };
    
   
-    const response = await fetch(' 	https://webhook.site/b39db0b5-bace-4d39-a96a-e1018a103fbb', {
+    const response = await fetch('/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +85,7 @@ export default function Checkout(props) {
  const handleThesiChange = (value) => {
    setThesiErgasias(value);
    let qs = [];
-   if (value === "πριονι") {
+   if (value === "πριόνι") {
      qs = [
        { id: 'erotisi1', label: 'είναι ο χώρος καθαρός στο πριόνι;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
         { id: 'erotisi2', label: 'είναι ο χώρος καθαρός στο τυλιχτικο;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
@@ -89,17 +95,22 @@ export default function Checkout(props) {
        { id: 'erotisi6', label: 'θεωρείτε πως υπάρχει κατι απο την προηγούμενη βάρδια που σας δημιουργησε προβλημα?', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
        { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
      ];
-   } else if (value === "αφρος") {
+   } else if (value === "αφρός") {
      qs = [
-       { id: 'erotisi1', label: 'εἶναι ὁ χώρος καθαρός;', type:'select', options:['καλα','μετρια','κακα'], placeholder:'επελεξε' },
-       { id: 'erotisi2', label: 'υπάρχει ζημία στα χημικά;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
+       { id: 'erotisi1', label: 'είναι ὁ χώρος καθαρός στο χώρο ευθύνης σας;', type:'select', options:['καλά','μέτρια','κακά'], placeholder:'επελεξε' },
+       { id: 'erotisi2', label: 'υπάρχει επάρκεια στις α ύλες', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
+       { id: 'erotisi3', label: 'είναι ο χώρος των δεξαμενών καθαρός;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
        { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
      ];
-   } else if (value === "ρολλα") {
+   } else if (value === "ρολλά") {
      qs = [
-       { id: 'erotisi1', label: 'εἶναι ὁ χώρος καθαρός;', type:'select', options:['καλα','μετρια','κακα'], placeholder:'επελεξε' },
-       { id: 'erotisi2', label: 'υπάρχει ζημία στα ρολλά;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
-       { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
+       { id: 'erotisi1', label: 'είναι ὁ χώρος καθαρός στο χώρο ευθύνης σας;', type:'select', options:['καλά','μέτρια','κακά'], placeholder:'επελεξε' },
+       { id: 'erotisi2', label: 'έγινε κάποια ζημιά που δεν αναφέρθηκε?', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       { id: 'erotisi3', label: 'χρειάζεται να φύγουν χάρτινα ρολλά απο τον χώρο εκφόρτωσης', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       { id: 'erotisi4', label: 'εχει γινει απαραιτητη προετοιμασία για τα προς παραγωγή ρολά απο την προηγούμενη βάρδια', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       { id: 'erotisi5', label: 'εχει γινει απαραιτητη ενημέρωση για αναμενόμενες παραλαβές ρολλών', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       
+       { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισάγετε παρατήρηση' },
      ];
    }
    setAnswers(qs.reduce((acc, q) => ({ ...acc, [q.id]: '' }), {}));
@@ -224,7 +235,7 @@ else{
               maxWidth: 500,
             }}
           >
-            <Info totalPrice={activeStep >= 2 ? '$144.97' : '$134.98'} />
+            <Info totalPrice={activeStep >= 2 ? 'καταχώρηση απαντησεων' : 'ερωτηματολόγιο'} />
           </Box>
         </Grid>
         <Grid
@@ -287,13 +298,13 @@ else{
             >
               <div>
                 <Typography variant="subtitle2" gutterBottom>
-                  Selected products
+                  ερωτηματολόγιο
                 </Typography>
                 <Typography variant="body1">
-                  {activeStep >= 2 ? '$144.97' : '$134.98'}
+                  {activeStep === 1 ? 'Βήμα 2' : activeStep >= 2 ? 'καταχώρηση απαντήσεων' : 'Βημα 1'}
                 </Typography>
               </div>
-              <InfoMobile totalPrice={activeStep >= 2 ? '$144.97' : '$134.98'} />
+              <InfoMobile totalPrice={activeStep >= 2 ? 'καταχώρηση απαντησεων' : 'ερωτηματολόγιο'} />
             </CardContent>
           </Card>
           <Box
@@ -370,7 +381,7 @@ else{
                       variant="text"
                       sx={{ display: { xs: 'none', sm: 'flex' } }}
                     >
-                      προηγουμενο
+                      προηγούμενο
                     </Button>
                   )}
                   {activeStep !== 0 && (
@@ -381,7 +392,7 @@ else{
                       fullWidth
                       sx={{ display: { xs: 'flex', sm: 'none' } }}
                     >
-                      προηγουμενο
+                      προηγούμενο
                     </Button>
                   )}
                   <Button
@@ -390,7 +401,7 @@ else{
                     onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
                     sx={{ width: { xs: '100%', sm: 'fit-content' } }}
                   >
-                    {activeStep === steps.length - 1 ? 'καταχωρηση απαντησεων' : 'επομενο'}
+                    {activeStep === steps.length - 1 ? 'καταχώρηση απαντήσεων' : 'επόμενο'}
                   </Button>
                 </Box>
               </React.Fragment>

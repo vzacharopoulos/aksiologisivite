@@ -22,7 +22,9 @@ export default function Erotiseis({questions, answers, setAnswers }) {
     <Grid container rowSpacing={3} columnSpacing={40}>
       {questions.map((q) => (
         <FormGrid key={q.id} item xs={12}>
-          <FormLabel htmlFor={q.id} required={q.type !== 'text'}>
+          <FormLabel htmlFor={q.id}
+           required={q.type !== 'text'}
+           sx={{ color:'black', fontFamily: 'Roboto, Arial, sans-serif', fontSize: '0.95rem' }}>
             {q.label}
           </FormLabel>
 
@@ -54,6 +56,7 @@ export default function Erotiseis({questions, answers, setAnswers }) {
                   setAnswers({ ...answers, [q.id]: e.target.value })
                 }
                 inputProps={{ 'aria-label': q.label }}
+                sx={{ color:'lightblack', fontSize: '0.8rem' }}
               >
                 <MenuItem value="" disabled>
                   {q.placeholder}

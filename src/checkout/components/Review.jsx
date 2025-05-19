@@ -20,10 +20,10 @@ export default function Review({
   answers = {},      
 }) {
   const stoixeia = [
-  { name: 'Ονομα:', detail: firstName  },
+  { name: 'όνομα:', detail: firstName  },
   { name: 'Επίθετο:', detail: lastName},
   { name: 'Θέση εργασίας:', detail:thesiErgasias  },
-  { name: 'βαρδια:', detail:getShifttime()  },
+  { name: 'βάρδια:', detail:getShifttime()  },
   ]
    
    const erotapantiseis = [
@@ -40,7 +40,7 @@ export default function Review({
     
         <div>
           <Typography variant="h6" gutterBottom>
-            στοιχεια Εργαζομενου
+            Στοιχεία Εργαζομένου
           </Typography>
           <Grid container>
             {stoixeia.map((stoixeio) => (

@@ -30,13 +30,13 @@ export default function  AddressForm({
     <Grid container spacing={3}>
       <FormGrid size={{ xs: 12, md: 6 }}>
         <FormLabel htmlFor="first-name" required>
-          ονομα 
+          Όνομα 
         </FormLabel>
         <OutlinedInput
           id="first-name"
           name="first-name"
           type="name"
-          placeholder="ονομα"
+          placeholder="Όνομα"
           autoComplete="first name"
           required
           size="small"
@@ -46,13 +46,13 @@ export default function  AddressForm({
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
         <FormLabel htmlFor="last-name" required>
-          επιθετο 
+          Επίθετο 
         </FormLabel>
         <OutlinedInput
           id="last-name"
           name="last-name"
           type="last-name"
-          placeholder="επιθετο"
+          placeholder="Επίθετο"
           autoComplete="last name"
           required
           size="small"
@@ -81,11 +81,11 @@ export default function  AddressForm({
          
     >
       <MenuItem value="" disabled>
-        διαλεξε θεση εργασιας
+        διάλεξε θέση εργασίας
       </MenuItem>
-      <MenuItem value="πριονι">πριονι</MenuItem>
-      <MenuItem value="αφρος">αφρος</MenuItem>
-      <MenuItem value="ρολλα">ρολλα</MenuItem>
+      <MenuItem value="πριόνι">πριόνι</MenuItem>
+      <MenuItem value="αφρός">αφρός</MenuItem>
+      <MenuItem value="ρολλά">ρολλά</MenuItem>
     </Select>
   </FormControl>
 </FormGrid>

@@ -9,12 +9,12 @@ import GetShifttime from  '../utilities/getShifttime';
  const currentDate = new Date().toLocaleDateString()
 const products = [
   {
-    name: 'ημερομηνια',
+    name: 'ημερομηνία',
     desc: '',
     price: currentDate,
   },
   {
-    name: 'βαρδια',
+    name: 'βάρδια',
     desc: <GetShift />,
     price: <GetShifttime />,
   },
