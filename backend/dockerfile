@@ -1,0 +1,49 @@
+###############################################################################
+# 1) 👉 Builder stage: install deps & build the Vite app
+###############################################################################
+FROM node:18-alpine AS builder
+
+# where to put your code in this image
+WORKDIR /app
+
+# copy only package manifests & lockfile first to leverage Docker cache
+COPY package*.json ./
+# if you have yarn or pnpm, adjust accordingly:
+# COPY yarn.lock ./
+
+# install all dependencies (frontend + any shared backend utils)
+RUN npm ci
+
+# copy **everything** (your React source, server code, vite.config.js…)
+COPY . .
+
+# run the Vite build; this emits a `dist/` folder by default
+RUN npm run build
+
+
+###############################################################################
+# 2) 👉 Runtime stage: lean image with only production deps + built assets
+###############################################################################
+FROM node:18-alpine
+
+WORKDIR /app
+
+# copy only production dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# copy built front-end from the builder image
+COPY --from=builder /app/dist ./public
+
+# copy your server code (index.js, plus any other .js modules)
+COPY index.js .
+# if you have other folders (e.g. utils/, routes/), copy them too:
+# COPY utils/ ./utils/
+# COPY routes/ ./routes/
+
+# expose whatever port your server listens on
+ENV PORT=3000
+EXPOSE 3000
+
+# run your Express (or other) server which serves /public + APIs
+CMD ["node", "index.js"]

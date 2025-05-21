@@ -1,0 +1,147 @@
+/*import express from 'express';
+import cors from 'cors';
+import sql from 'mssql';
+import {dirname} from 'path'
+import path from 'path'
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import os from 'os';
+import knex from 'knex'; // Use import instead of require
+
+const db= knex  ({
+  client: 'mssql', // Specify the client as 'mssql'
+  connection: {
+    server: process.env.DB_SERVER, // e.g., 'localhost' or an IP address
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    options: {
+      encrypt: true, // Use this if you are connecting to Azure SQL Database or if your SQL Server requires SSL/TLS
+      trustServerCertificate: true // Change to false for production to use a trusted certificate
+    }
+  }
+});
+export default db;
+
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const dbConfig = {
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  server: process.env.DB_SERVER, // e.g. 'localhost'
+  database: process.env.DB_NAME,
+  options: {
+    encrypt: true, // required for Azure
+    trustServerCertificate: true // for local dev
+  }
+};
+
+
+app.post('/submit', async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    thesiErgasias,
+    currentDate,
+   /* currentShift,
+    labeledQuestions  
+  } = req.body;
+
+  
+
+try {
+    await knex.transaction(async trx => {
+      // 1) Upsert Employee
+      const [emp] = await trx('Employees')
+        .insert({ firstName, lastName, thesiErgasias })
+        .onConflict(['firstName','lastName','thesiErgasias'])
+        .ignore()
+        .returning('employee_id');
+
+      const employee_id = emp?.employee_id
+        ?? (await trx('Employees')
+              .select('employee_id')
+              .where({ firstName, lastName, thesiErgasias })
+              .first()
+            ).employee_id;
+
+            
+          
+      /* 2) Upsert Questions
+      const questionsRows = labeledQuestions.map(q => ({
+        question_id:   q.id,
+        question_text: q.label
+      }));
+      await trx('Question')
+        .insert(questionsRows)
+        .onConflict('question_id')
+        .merge();
+
+      // 3) Upsert Session (formerly EmployeeAtShift)
+      const [sess] = await trx('EmployeeAtShift')  // or 'SurveySession'
+        .insert({ employee_id, currentDate, currentShift })
+        .onConflict(['employee_id','currentDate','currentShift'])
+        .ignore()
+        .returning('session_id');
+
+      const session_id = sess?.session_id
+        ?? (await trx('EmployeeAtShift')
+              .select('session_id')
+              .where({ employee_id, currentDate, currentShift })
+              .first()
+            ).session_id;
+
+       //4) Upsert Answers
+      const answersRows = labeledQuestions.map(q => ({
+        session_id,
+        question_id: q.id,
+        answer_text: q.answer
+      }));
+      await trx('Answer')
+        .insert(answersRows)
+        .onConflict(['session_id','question_id'])
+        .merge({ answer_text: trx.raw('EXCLUDED.answer_text') }); 
+    });
+                     
+    res.status(201).json({ success: true });
+  } catch (err) {
+    console.error('Survey submission error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}); 
+
+  
+// resolve the “virtual” import.meta.url to a real file path:
+const __filename = fileURLToPath(import.meta.url);
+
+// get its directory name:
+const __dirname = dirname(__filename);
+//    Point to the Vite build output directory
+app.use(
+  express.static(path.join(__dirname, '../dist'))
+);
+
+// 4. SPA “catch-all” — for any GET that isn’t /submit, send index.html
+app.get('/*catchall', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+}); 
+
+const getLocalIP = () => {
+  const interfaces = os.networkInterfaces();
+  for (const name in interfaces) {
+    for (const iface of interfaces[name] || []) {
+      if (iface.family === 'IPv4' && !iface.internal) return iface.address;
+    }
+  }
+};
+var myIP=getLocalIP()
+
+const PORT = process.env.PORT || 3013;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`API server running at http://localhost:${PORT}`);
+    console.log(`try connecting to ${myIP}:${PORT}`);
+
+})*/
