@@ -21,7 +21,9 @@ const products = [
   
 ];
 
-function Info({ totalPrice }) {
+function Info({ date , setDate }) {
+  const currentDate = new Date().toLocaleDateString()
+  setDate(currentDate)
   return (
     <React.Fragment>
      

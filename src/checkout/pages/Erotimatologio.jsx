@@ -22,7 +22,7 @@ import AppTheme from '../../shared-theme/AppTheme';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 import GetShift from '../utilities/getShift.jsx'
 
-import { useEffect } from 'react';
+
 
 
 
@@ -32,7 +32,9 @@ export default function Checkout(props) {
   const [lastName, setLastName] = React.useState('');
   const [answers, setAnswers] = React.useState({});
   const [questions, setQuestions] = React.useState([]);
- 
+  const [date, setDate] = React.useState();
+  const [submitFormSuccess, setSubmitFormSuccess] = React.useState(false);
+
  const [thesiErgasias, setThesiErgasias] = React.useState("");
  const [fieldErrors, setFieldErrors] = React.useState({
   firstName: false,
@@ -41,24 +43,30 @@ export default function Checkout(props) {
 });
  const steps = ['στοιχεία εργαζομένου', 'ερωτηματολόγιο', 'επιβεβαίωση'];
  var currentShift=GetShift()
- const submitForm = async () => {
-   const labeledQuestions = questions.reduce((acc, q, idx) => {
-    acc[`question${idx + 1}`] = q.label;
-    return acc;
-  }, {} );
-// => [ { label: "Foo" }, { label: "Bar" }, … ]
+ const submitForm = async () => {;
+const labeledQuestions = questions.map(q => ({
+      id:    q.id,
+      label: q.label,
+      /*answer: answers[q.id]*/   // grab the value they selected/typed
+    }))
+  const today      = new Date();
+  const sqlDate = today.toISOString().slice(0, 10);  // "YYYY-MM-DD"
+    
   const payload = {
     firstName,
     lastName,
     thesiErgasias,
+    sqlDate,
     currentShift,
-    ...labeledQuestions,
-    ...answers,
+    labeledQuestions,
+    answersArray: Object.entries(answers).map(
+    ([questionId, answer]) => ({ questionId, answer })
+  )
    
   
-  };
-   
-  
+  }
+    console.log('Payload being sent:', payload);
+
     const response = await fetch('/submit', {
       method: 'POST',
       headers: {
@@ -68,14 +76,18 @@ export default function Checkout(props) {
     });
       const text = await response.text(); // ⬅️ Try reading as plain text first
       console.log('Raw response:', text);
+      
+      
    try{
     if (!response.ok) {
-      throw new Error('Failed to submit');
+      throw new Error('Failed to submite');
+      
     }
-
+    
    
     
     alert('Your form was submitted!');
+    setSubmitFormSuccess(true)
   } catch (error) {
     console.error('Error:', error);
     alert('Something went wrong.');
@@ -87,30 +99,30 @@ export default function Checkout(props) {
    let qs = [];
    if (value === "πριόνι") {
      qs = [
-       { id: 'erotisi1', label: 'είναι ο χώρος καθαρός στο πριόνι;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
-        { id: 'erotisi2', label: 'είναι ο χώρος καθαρός στο τυλιχτικο;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
-        { id: 'erotisi3', label: 'είναι ο χώρος καθαρός στον πακεταδορο;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
-       { id: 'erotisi4', label: 'υπάρχει κάποια ζημία;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
-       { id: 'erotisi5', label: 'υπάρχουν πολυουρεθάνες ή άλλα χημικά στο δάπεδο?', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
-       { id: 'erotisi6', label: 'θεωρείτε πως υπάρχει κατι απο την προηγούμενη βάρδια που σας δημιουργησε προβλημα?', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
-       { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
+       { id: 'erotisiprioni1', label: 'είναι ο χώρος καθαρός στο πριόνι;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+       { id: 'erotisiprioni2', label: 'είναι ο χώρος καθαρός στο τυλιχτικο;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+       { id: 'erotisiprioni33', label: 'είναι ο χώρος καθαρός στον πακεταδορο;', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+       { id: 'erotisiprioni4', label: 'υπάρχει κάποια ζημία;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
+       { id: 'erotisiprioni5', label: 'υπάρχουν πολυουρεθάνες ή άλλα χημικά στο δάπεδο?', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+       { id: 'erotisiprioni6', label: 'θεωρείτε πως υπάρχει κατι απο την προηγούμενη βάρδια που σας δημιουργησε προβλημα?', type:'select', options:['ναι','οχι'], placeholder:'επελεξε' },
+       { id: 'paratiriseisprioni1', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
      ];
    } else if (value === "αφρός") {
      qs = [
-       { id: 'erotisi1', label: 'είναι ὁ χώρος καθαρός στο χώρο ευθύνης σας;', type:'select', options:['καλά','μέτρια','κακά'], placeholder:'επελεξε' },
-       { id: 'erotisi2', label: 'υπάρχει επάρκεια στις α ύλες', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
-       { id: 'erotisi3', label: 'είναι ο χώρος των δεξαμενών καθαρός;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
-       { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
+       { id: 'erotisiafros1', label: 'είναι ὁ χώρος καθαρός στο χώρο ευθύνης σας;', type:'select', options:['καλά','μέτρια','κακά'], placeholder:'επελεξε' },
+       { id: 'erotisiafros2', label: 'υπάρχει επάρκεια στις α ύλες', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
+       { id: 'erotisiafros3', label: 'είναι ο χώρος των δεξαμενών καθαρός;', type:'select', options:['οχι','ναι'], placeholder:'επελεξε' },
+       { id: 'paratiriseisafros1', label: 'παρατηρήσεις', type:'text', placeholder:'εισαγετε παρατηρηση' },
      ];
    } else if (value === "ρολλά") {
      qs = [
-       { id: 'erotisi1', label: 'είναι ὁ χώρος καθαρός στο χώρο ευθύνης σας;', type:'select', options:['καλά','μέτρια','κακά'], placeholder:'επελεξε' },
-       { id: 'erotisi2', label: 'έγινε κάποια ζημιά που δεν αναφέρθηκε?', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
-       { id: 'erotisi3', label: 'χρειάζεται να φύγουν χάρτινα ρολλά απο τον χώρο εκφόρτωσης', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
-       { id: 'erotisi4', label: 'εχει γινει απαραιτητη προετοιμασία για τα προς παραγωγή ρολά απο την προηγούμενη βάρδια', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
-       { id: 'erotisi5', label: 'εχει γινει απαραιτητη ενημέρωση για αναμενόμενες παραλαβές ρολλών', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       { id: 'erotisi1rolla', label: 'είναι ὁ χώρος καθαρός στο χώρο ευθύνης σας;', type:'select', options:['καλά','μέτρια','κακά'], placeholder:'επελεξε' },
+       { id: 'erotisi2rolla', label: 'έγινε κάποια ζημιά που δεν αναφέρθηκε?', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       { id: 'erotisi3rolla', label: 'χρειάζεται να φύγουν χάρτινα ρολλά απο τον χώρο εκφόρτωσης', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       { id: 'erotisi4rolla', label: 'εχει γινει απαραιτητη προετοιμασία για τα προς παραγωγή ρολά απο την προηγούμενη βάρδια', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
+       { id: 'erotisi5rolla', label: 'εχει γινει απαραιτητη ενημέρωση για αναμενόμενες παραλαβές ρολλών', type:'select', options:['οχι','ναι'], placeholder:'επελεξε?' },
        
-       { id: 'paratiriseis', label: 'παρατηρήσεις', type:'text', placeholder:'εισάγετε παρατήρηση' },
+       { id: 'paratiriseisrolla1', label: 'παρατηρήσεις', type:'text', placeholder:'εισάγετε παρατήρηση' },
      ];
    }
    setAnswers(qs.reduce((acc, q) => ({ ...acc, [q.id]: '' }), {}));
@@ -187,6 +199,7 @@ else{
     const handleSubmit = () => {
   submitForm();       // Send to API
   setActiveStep(3);   // Show confirmation or navigate if needed
+    
 };
     
     
@@ -235,7 +248,10 @@ else{
               maxWidth: 500,
             }}
           >
-            <Info totalPrice={activeStep >= 2 ? 'καταχώρηση απαντησεων' : 'ερωτηματολόγιο'} />
+            <Info
+            date={date}
+            setDate={setDate}
+       totalPrice={activeStep >= 2 ? 'καταχώρηση απαντησεων' : 'ερωτηματολόγιο'} />
           </Box>
         </Grid>
         <Grid
@@ -298,7 +314,7 @@ else{
             >
               <div>
                 <Typography variant="subtitle2" gutterBottom>
-                  ερωτηματολόγιο
+                  ερωτηματολόγιο 
                 </Typography>
                 <Typography variant="body1">
                   {activeStep === 1 ? 'Βήμα 2' : activeStep >= 2 ? 'καταχώρηση απαντήσεων' : 'Βημα 1'}
@@ -342,18 +358,10 @@ else{
               ))}
             </Stepper>
             {activeStep === steps.length ? (
-              <Stack spacing={2} useFlexGap>
-                <Typography variant="h1">📦</Typography>
-                <Typography variant="h5">οι απαντησεις σας καταχωρηθηκαν</Typography>
-                
-                <Button
-                  variant="contained"
-                  sx={{ alignSelf: 'start', width: { xs: '100%', sm: 'auto' } }}
-                  onClick={handleStart}
-                > 
-                  επιστροφη στην αρχικη
-                </Button>
-              </Stack>
+             < SubmissionConfirmation
+       submitFormSuccess={submitFormSuccess}
+             
+             />
             ) : (
               <React.Fragment>
                 {getStepContent(activeStep)}
