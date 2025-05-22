@@ -1,49 +1,37 @@
-###############################################################################
-# 1) 👉 Builder stage: install deps & build the Vite app
-###############################################################################
-FROM node:18-alpine AS builder
+# -------------------------
+# Stage 1: Build the React app
+# -------------------------
+FROM node:18-alpine AS frontend-builder
 
-# where to put your code in this image
-WORKDIR /app
+WORKDIR /app/client
 
-# copy only package manifests & lockfile first to leverage Docker cache
-COPY package*.json ./
-# if you have yarn or pnpm, adjust accordingly:
-# COPY yarn.lock ./
+# install only deps, so rebuild is cached
+COPY client/package*.json ./
+RUN npm install
 
-# install all dependencies (frontend + any shared backend utils)
-RUN npm ci
-
-# copy **everything** (your React source, server code, vite.config.js…)
-COPY . .
-
-# run the Vite build; this emits a `dist/` folder by default
+# copy source & build
+COPY client/ ./
 RUN npm run build
 
 
-###############################################################################
-# 2) 👉 Runtime stage: lean image with only production deps + built assets
-###############################################################################
+# -------------------------
+# Stage 2: Setup the Express server
+# -------------------------
 FROM node:18-alpine
 
 WORKDIR /app
 
-# copy only production dependencies
+# install server deps
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --production
 
-# copy built front-end from the builder image
-COPY --from=builder /app/dist ./public
+# copy server code
+COPY . .
 
-# copy your server code (index.js, plus any other .js modules)
-COPY index.js .
-# if you have other folders (e.g. utils/, routes/), copy them too:
-# COPY utils/ ./utils/
-# COPY routes/ ./routes/
+# copy built frontend into Express static folder
+# (assumes your Express serves ./public)
+COPY --from=frontend-builder /app/client/dist ./public
 
-# expose whatever port your server listens on
-ENV PORT=3000
-EXPOSE 3000
-
-# run your Express (or other) server which serves /public + APIs
+# expose and run
+EXPOSE 3013
 CMD ["node", "index.js"]
